@@ -15,7 +15,7 @@
 καθώς και τη χρήση **νημάτων (threads)** για την ταυτόχρονη εξυπηρέτηση πολλών πελατών.
 
 > 📖 Τα βασικά παραδείγματα TCP και UDP Sockets (σε Java και Python) βασίζονται στο βιβλίο
-> **J.F. Kurose, K.W. Ross — *Computer Networking: A Top-Down Approach*** (βλ. [Βιβλιογραφία](#-βιβλιογραφία)).
+> **J.F. Kurose, K.W. Ross — *Computer Networking: A Top-Down Approach*** (βλ. [Βιβλιογραφία](https://ebooks.karbust.me/Technology/Computer%20Networking%20A%20Top-Down%20Approach,%208th%20Edition%20by%20James%20F.%20Kurose,%20Keith%20W.%20Ross-Pearson-9780136681557.pdf)).
 
 ---
 
