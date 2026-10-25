@@ -28,7 +28,8 @@ WebProgECE/
 │   ├── udp_sockets/            UDPServer.java, UDPClient.java
 │   ├── threadsexample/         MyThread.java, ThreadRunnable.java
 │   ├── EchoClientTCP/          EchoServer.java, EchoClient.java
-│   └── TimeClientServerUDP/    TimeServer.java, TimeClient.java
+│   ├── TimeClientServerUDP/    TimeServer.java, TimeClient.java
+│   └── requirements.sh         Εγκατάσταση JDK 25 σε Ubuntu / WSL
 ├── Lecture_Python-Sockets_and_Threads/
 │   ├── TCP_Sockets/            TCPServer.py, TCPClient.py
 │   ├── UDP_Sockets/            UDPServer.py, UDPClient.py
@@ -163,7 +164,14 @@ sequenceDiagram
 Οι clients τυπώνουν οδηγίες όταν περιμένουν να πληκτρολογήσετε κάτι.
 
 ### Java
-**Προαπαιτούμενα:** **JDK 8** ή νεότερο (`java -version`), προαιρετικά ένα IDE όπως **Eclipse** ή **IntelliJ IDEA**.
+**Προαπαιτούμενα:** **JDK 8** ή νεότερο (`java -version` και `javac -version`), προαιρετικά ένα IDE όπως **Eclipse** ή **IntelliJ IDEA**.
+Σε **Ubuntu / WSL** το JDK εγκαθίσταται με το script [`requirements.sh`](Lecture_Java-Sockets_and_Threads/requirements.sh),
+που εγκαθιστά το **OpenJDK 25** (LTS):
+
+```bash
+cd Lecture_Java-Sockets_and_Threads
+bash requirements.sh
+```
 
 Τα αρχεία δεν ανήκουν σε κάποιο `package`, οπότε μεταγλωττίζονται απευθείας μέσα στον φάκελό τους.
 
