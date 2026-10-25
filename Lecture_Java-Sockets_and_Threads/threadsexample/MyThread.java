@@ -12,7 +12,6 @@
  *
  * Βασικές έννοιες: Runnable, Thread, start() έναντι run(), όνομα νήματος.
  */
-import threadsaxample.ThreadRunnable;
 
 public class MyThread {
     public static void main(String[] args) {
