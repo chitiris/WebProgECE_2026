@@ -10,10 +10,20 @@
 
 ## Εκτέλεση
 
+**Προαπαιτούμενα:** JDK (`javac -version`). Σε Ubuntu / WSL: `bash ../requirements.sh`, που εγκαθιστά το OpenJDK 25.
+
 ```bash
 javac *.java          # σε Windows, αν χρειαστεί: javac -encoding UTF-8 *.java
 java MyThread
 ```
+
+> ⚠️ Το πρόγραμμα ξεκινά **πάντα από την `MyThread`**, που έχει τη μέθοδο `main`. Η `ThreadRunnable` περιέχει
+> μόνο τον κώδικα των νημάτων και δεν τρέχει μόνη της: το `java ThreadRunnable.java` δίνει
+> `error: can't find main(String[]) method in class: ThreadRunnable`.
+>
+> 💡 Η σύντομη μορφή `java MyThread.java` (εκτέλεση χωρίς `javac`) δουλεύει μόνο από τη **Java 22** και μετά,
+> γιατί βρίσκει μόνη της και το `ThreadRunnable.java` του ίδιου φακέλου. Σε παλαιότερες εκδόσεις βγάζει
+> `cannot find symbol`. Οι εντολές `javac *.java` και `java MyThread` δουλεύουν σε κάθε έκδοση.
 
 ## Αναμενόμενη έξοδος
 
