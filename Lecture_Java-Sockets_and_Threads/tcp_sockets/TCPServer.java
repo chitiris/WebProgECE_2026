@@ -54,6 +54,10 @@ public class TCPServer  {
             // Στέλνουμε την πρόταση με κεφαλαία στον πελάτη
             outToClient.writeBytes(capitalizedSentence);
 
+            // Κλείνουμε το socket της σύνδεσης: τελειώνει η επικοινωνία με αυτόν τον πελάτη και
+            // ελευθερώνονται οι πόροι. Το welcomeSocket μένει ανοιχτό για τον επόμενο πελάτη.
+            connectionSocket.close();
+
             // Ενημερώνουμε ότι ο server περιμένει τον επόμενο πελάτη (επιστροφή στην accept())
             System.out.println("Waiting next client");
         }
