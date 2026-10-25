@@ -132,25 +132,6 @@ WebProgECE/
 
 ---
 
-## 🟨 JavaScript
-
-📁 [`Lecture_JavaScript`](Lecture_JavaScript)
-
-| Φάκελος | Θέμα | Αρχεία |
-|---|---|---|
-| [`Form-Example`](Lecture_JavaScript/Form-Example) | Φόρμα επικοινωνίας με έλεγχο πεδίων (validation) | `index.html`, `styles.css`, `script.js` |
-
-### 1. Φόρμα επικοινωνίας — [`Form-Example`](Lecture_JavaScript/Form-Example)
-Μια responsive φόρμα με πεδία **Όνομα**, **Email** και **Μήνυμα**. Πριν από την υποβολή, το **`script.js`**
-ελέγχει ότι όλα τα πεδία είναι συμπληρωμένα και ότι το email έχει σωστή μορφή, με μια κανονική έκφραση
-(regular expression) που εξηγείται βήμα-βήμα στα σχόλια του κώδικα.
-
-**Έννοιες:** `addEventListener('submit', …)`, `event.preventDefault()`, `trim()`, regular expressions, `form.reset()`.
-
-**Εκτέλεση:** ανοίξτε το `index.html` σε έναν browser. Δεν χρειάζεται εγκατάσταση ή server.
-
----
-
 ## 🔁 TCP vs UDP με μια ματιά
 
 ```mermaid
@@ -244,9 +225,9 @@ python TCPClient.py
 
 ---
 
-## 🐳 Εργαστήριο 4: Docker
+## 🐳 Διάλεξη: Docker
 
-Στο **Εργαστήριο 4** θα ασχοληθούμε με **Docker** και **Docker Compose**, με βάση το αποθετήριο
+Στη διάλεξη αυτή θα ασχοληθούμε με **Docker** και **Docker Compose**, με βάση το αποθετήριο
 [**WebServer-Dockers-ECE**](https://github.com/chitiris/WebServer-Dockers-ECE).
 Το αποθετήριο αυτό στήνει με containers ένα πλήρες περιβάλλον ανάπτυξης web εφαρμογών:
 
@@ -257,8 +238,44 @@ python TCPClient.py
 | **MySQL** | Βάση δεδομένων |
 | **phpMyAdmin** | Διαχείριση της βάσης μέσω browser |
 
-**Προετοιμασία πριν από το εργαστήριο:** εγκαταστήστε το [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+**Προετοιμασία πριν από τη διάλεξη:** εγκαταστήστε το [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 (σε Windows με το WSL 2 backend) και ακολουθήστε τις οδηγίες του README του αποθετηρίου.
+
+---
+
+## 🎨 Διάλεξη: HTML και CSS
+
+Η διάλεξη βασίζεται στο αποθετήριο [**Netlify-ece-example**](https://github.com/chitiris/Netlify-ece-example),
+μια στατική σελίδα portfolio που φτιάχνεται με **HTML** και **CSS** και δημοσιεύεται στο **Netlify**.
+
+🌐 **Live:** [ecedemo.netlify.app](https://ecedemo.netlify.app/)
+
+| Αρχείο | Ρόλος |
+|---|---|
+| `index.html` | Η δομή της σελίδας: ενότητες, λίστες, εικόνες και φόρμα επικοινωνίας |
+| `styles.css` | Η εμφάνιση: χρώματα, γραμματοσειρές, διάταξη |
+| `formValidation.js` | Έλεγχος των πεδίων της φόρμας πριν από την υποβολή |
+
+**Έννοιες:** σημασιολογικά tags (`header`, `section`, `footer`), φόρμες, επιλογείς CSS (id, attribute, `:hover`), media queries για responsive σχεδίαση, δημοσίευση στατικού site στο Netlify.
+
+---
+
+## 🟨 Διάλεξη: JavaScript
+
+📁 [`Lecture_JavaScript`](Lecture_JavaScript)
+
+| Φάκελος | Θέμα | Αρχεία |
+|---|---|---|
+| [`Form-Example`](Lecture_JavaScript/Form-Example) | Φόρμα επικοινωνίας με έλεγχο πεδίων (validation) | `index.html`, `styles.css`, `script.js` |
+
+### 1. Φόρμα επικοινωνίας — [`Form-Example`](Lecture_JavaScript/Form-Example)
+Μια responsive φόρμα με πεδία **Όνομα**, **Email** και **Μήνυμα**. Πριν από την υποβολή, το **`script.js`**
+ελέγχει ότι όλα τα πεδία είναι συμπληρωμένα και ότι το email έχει σωστή μορφή, με μια κανονική έκφραση
+(regular expression) που εξηγείται βήμα-βήμα στα σχόλια του κώδικα.
+
+**Έννοιες:** `addEventListener('submit', …)`, `event.preventDefault()`, `trim()`, regular expressions, `form.reset()`.
+
+**Εκτέλεση:** ανοίξτε το `index.html` σε έναν browser. Δεν χρειάζεται εγκατάσταση ή server.
 
 ---
 
@@ -271,13 +288,14 @@ python TCPClient.py
 
 ## 🔗 Χρήσιμοι Σύνδεσμοι
 - 📚 [Σελίδα μαθήματος στο eClass (HMMY105)](https://eclass.uowm.gr/courses/HMMY105/)
-- 🐳 [WebServer-Dockers-ECE — Εργαστήριο 4 (Docker)](https://github.com/chitiris/WebServer-Dockers-ECE)
+- 🐳 [WebServer-Dockers-ECE — Διάλεξη: Docker](https://github.com/chitiris/WebServer-Dockers-ECE)
 - ☕ [Oracle Java Tutorials — All About Sockets](https://docs.oracle.com/javase/tutorial/networking/sockets/index.html)
 - ☕ [Oracle Java Tutorials — All About Datagrams](https://docs.oracle.com/javase/tutorial/networking/datagrams/index.html)
 - ☕ [Oracle Java Tutorials — Concurrency](https://docs.oracle.com/javase/tutorial/essential/concurrency/index.html)
 - 🐍 [Python Docs — `socket` — Low-level networking interface](https://docs.python.org/3/library/socket.html)
 - 🐍 [Python Docs — Socket Programming HOWTO](https://docs.python.org/3/howto/sockets.html)
 - 🐍 [Python Docs — `threading` — Thread-based parallelism](https://docs.python.org/3/library/threading.html)
+- 🎨 [Netlify-ece-example — Διάλεξη: HTML και CSS](https://github.com/chitiris/Netlify-ece-example) · [🌐 Live](https://ecedemo.netlify.app/)
 - 🟨 [MDN — Client-side form validation](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Form_validation)
 
 ---
