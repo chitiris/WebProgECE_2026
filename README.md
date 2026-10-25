@@ -215,6 +215,24 @@ python TCPClient.py
 
 ---
 
+## 🐳 Εργαστήριο 4: Docker
+
+Στο **Εργαστήριο 4** θα ασχοληθούμε με **Docker** και **Docker Compose**, με βάση το αποθετήριο
+[**WebServer-Dockers-ECE**](https://github.com/chitiris/WebServer-Dockers-ECE).
+Το αποθετήριο αυτό στήνει με containers ένα πλήρες περιβάλλον ανάπτυξης web εφαρμογών:
+
+| Υπηρεσία | Ρόλος |
+|---|---|
+| **Nginx** | Web server |
+| **PHP** | Εκτέλεση server-side κώδικα |
+| **MySQL** | Βάση δεδομένων |
+| **phpMyAdmin** | Διαχείριση της βάσης μέσω browser |
+
+**Προετοιμασία πριν από το εργαστήριο:** εγκαταστήστε το [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+(σε Windows με το WSL 2 backend) και ακολουθήστε τις οδηγίες του README του αποθετηρίου.
+
+---
+
 ## 📖 Βιβλιογραφία
 - J.F. Kurose, K.W. Ross, ***Computer Networking: A Top-Down Approach***, Pearson.
   Τα παραδείγματα TCP και UDP sockets — σε Java (`tcp_sockets`, `udp_sockets`) και σε Python (`TCP_Sockets`, `UDP_Sockets`) —
@@ -224,6 +242,7 @@ python TCPClient.py
 
 ## 🔗 Χρήσιμοι Σύνδεσμοι
 - 📚 [Σελίδα μαθήματος στο eClass (HMMY105)](https://eclass.uowm.gr/courses/HMMY105/)
+- 🐳 [WebServer-Dockers-ECE — Εργαστήριο 4 (Docker)](https://github.com/chitiris/WebServer-Dockers-ECE)
 - ☕ [Oracle Java Tutorials — All About Sockets](https://docs.oracle.com/javase/tutorial/networking/sockets/index.html)
 - ☕ [Oracle Java Tutorials — All About Datagrams](https://docs.oracle.com/javase/tutorial/networking/datagrams/index.html)
 - ☕ [Oracle Java Tutorials — Concurrency](https://docs.oracle.com/javase/tutorial/essential/concurrency/index.html)
