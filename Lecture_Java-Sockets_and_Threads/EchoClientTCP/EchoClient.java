@@ -1,23 +1,58 @@
-import java.io.*;
-import java.net.*;
+/*
+ * EchoClient.java — Πελάτης (client) για τον πολυνηματικό Echo Server μέσω TCP.
+ *
+ * Τι κάνει:
+ *   Συνδέεται στον EchoServer (127.0.0.1, θύρα 8205) και επαναλαμβάνει συνεχώς τα εξής:
+ *     1. διαβάζει μια γραμμή από το πληκτρολόγιο,
+ *     2. τη στέλνει στον server μέσω του TCP socket,
+ *     3. διαβάζει την απάντηση του server ("Received: <κείμενο>") και την τυπώνει.
+ *   Αν σταλεί η λέξη "quit", ο server κλείνει τη δική του πλευρά της σύνδεσης.
+ *
+ * Εκτέλεση (πρώτα ο server, μετά ο client, σε ξεχωριστά τερματικά):
+ *   javac *.java
+ *   java EchoServer
+ *   java EchoClient
+ *   Ανοίξτε πολλούς EchoClient ταυτόχρονα για να δείτε ότι ο server εξυπηρετεί
+ *   κάθε πελάτη σε δικό του νήμα.
+ *
+ * Βασικές έννοιες: Socket, ροές εισόδου/εξόδου (streams) πάνω από TCP, try/catch/finally.
+ */
+import java.io.*;   // Κλάσεις εισόδου/εξόδου: DataInputStream, DataOutputStream, PrintStream, IOException
+import java.net.*;  // Κλάσεις δικτύου: Socket
 
 public class EchoClient {
-    public static void echoclient(DataInputStream sin, 
+    /*
+     * Η μέθοδος echoclient υλοποιεί τον κύριο βρόχο επικοινωνίας με τον server.
+     *   sin  : ροή εισόδου από το socket (ό,τι στέλνει ο server)
+     *   sout : ροή εξόδου προς το socket (ό,τι στέλνουμε στον server)
+     */
+    public static void echoclient(DataInputStream sin,
             DataOutputStream sout) throws IOException
 {
+    // Ροή εισόδου από το πληκτρολόγιο (System.in)
     DataInputStream in = new DataInputStream(System.in);
+    // Τυλίγουμε τη ροή εξόδου του socket σε PrintStream, ώστε να μπορούμε να
+    // στέλνουμε ολόκληρες γραμμές κειμένου με println() (προσθέτει αυτόματα '\n')
     PrintStream out = new PrintStream(sout);
+    // Μεταβλητή για την τρέχουσα γραμμή κειμένου
     String line;
+    // Ατέρμονος βρόχος: ο πελάτης συνεχίζει μέχρι να τερματιστεί το πρόγραμμα
+    // (π.χ. με Ctrl+C), αφού στον κώδικα δεν υπάρχει συνθήκη εξόδου
     while(true) {
         line = "";
-        // read keyboard input and write to TCP socket
+        // Βήμα 1: Διαβάζουμε μια γραμμή από το πληκτρολόγιο και τη στέλνουμε στο TCP socket.
+        // Το '\n' που προσθέτει η println() είναι σημαντικό: ο server διαβάζει
+        // με readLine(), δηλαδή περιμένει μέχρι να λάβει τέλος γραμμής.
         try {
             line = in.readLine();
             out.println(line);
         } catch(IOException e) {
             System.out.println(e.getMessage());
         }
-        // read TCP socket and write to terminal...
+        // Βήμα 2: Διαβάζουμε την απάντηση του server από το TCP socket και την τυπώνουμε στο τερματικό.
+        // Η readLine() μπλοκάρει (περιμένει) μέχρι να φτάσει ολόκληρη γραμμή από τον server.
+        // Σημείωση: η DataInputStream.readLine() είναι deprecated (παρωχημένη) στη Java·
+        // στον σύγχρονο κώδικα προτιμάται η BufferedReader.readLine().
         try {
             line = sin.readLine();
             System.out.println(line);
@@ -25,37 +60,42 @@ public class EchoClient {
             System.out.println(e.getMessage());
         }
     }
-}    // End of echoclient() function...
-public static void main(String[] args) 
+}    // Τέλος της μεθόδου echoclient()
+public static void main(String[] args)
 {
+    // Το socket δηλώνεται έξω από το try, ώστε να είναι ορατό και στο finally για να το κλείσουμε
     Socket s = null;
     try {
-        // Create the socket to communicate with "echo"
-        // on the specified host
+        // Δημιουργούμε το socket για επικοινωνία με τον "echo" server
+        // στον συγκεκριμένο υπολογιστή (host). Η διεύθυνση 127.0.0.1 (localhost)
+        // σημαίνει ότι ο server τρέχει στον ίδιο υπολογιστή με τον client.
+        // Ο κατασκευαστής new Socket(host, port) κάνει αμέσως τη σύνδεση TCP
+        // (three-way handshake)· αν ο server δεν τρέχει, πετάει εξαίρεση (Connection refused).
         String hostname = "127.0.0.1";
         s = new Socket(hostname, 8205);
-        // Create streams for reading and writing lines
-        // of text from and to this socket
-        DataInputStream sin = 
+        // Δημιουργούμε ροές για ανάγνωση και εγγραφή γραμμών κειμένου
+        // από και προς αυτό το socket
+        DataInputStream sin =
             new DataInputStream(s.getInputStream());
-        DataOutputStream sout = 
+        DataOutputStream sout =
             new DataOutputStream(s.getOutputStream());
-        // Tell the user that we"ve connected
-        System.out.println("Connected to " + 
+        // Ενημερώνουμε τον χρήστη ότι συνδεθήκαμε, τυπώνοντας τη διεύθυνση IP και τη θύρα του server
+        System.out.println("Connected to " +
             s.getInetAddress() + ":" + s.getPort());
-        // Use the echo feature...
+        // Ξεκινάμε την επικοινωνία με τον echo server
         echoclient(sin, sout);
     } catch(IOException e) {
         System.out.println(e);
     }
-    // Always be sure to close the socket...
+    // Το μπλοκ finally εκτελείται πάντα (με ή χωρίς εξαίρεση),
+    // οπότε εδώ φροντίζουμε να κλείσουμε το socket και να ελευθερώσουμε τους πόρους
     finally {
         try {
-            if (s != null) 
+            if (s != null)
                 s.close();
         } catch(IOException e) {
             System.out.println("Closing socket...");
         }
     }
-}         // End of main()
-}        // End of class
+}         // Τέλος της main()
+}        // Τέλος της κλάσης EchoClient
