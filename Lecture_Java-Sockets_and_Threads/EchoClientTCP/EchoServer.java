@@ -78,9 +78,16 @@ class EchoThread extends Thread {
 
             // Επαναλαμβάνουμε μέχρι ο πελάτης να στείλει "quit"
             while (!finished) {
-                // Διαβάζουμε μια γραμμή από τον πελάτη (μπλοκάρει μέχρι να φτάσει '\n').
-                // Σημείωση: αν ο πελάτης κλείσει απότομα τη σύνδεση, η readLine() επιστρέφει null.
+                // Διαβάζουμε μια γραμμή από τον πελάτη (μπλοκάρει μέχρι να φτάσει '\n')
                 String st = in.readLine();
+
+                // Αν ο πελάτης έκλεισε τη σύνδεση (π.χ. με Ctrl+C) χωρίς να στείλει "quit",
+                // η readLine() επιστρέφει null. Τότε βγαίνουμε από τον βρόχο, αλλιώς το
+                // st.equals("quit") παρακάτω θα προκαλούσε NullPointerException.
+                if (st == null) {
+                    System.out.println("Client disconnected without quit.");
+                    break;
+                }
 
                 // Στέλνουμε την ίδια γραμμή πίσω στον πελάτη, με το πρόθεμα "Received: "
                 out.print("Received: ");

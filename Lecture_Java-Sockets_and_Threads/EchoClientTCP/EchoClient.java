@@ -6,7 +6,8 @@
  *     1. διαβάζει μια γραμμή από το πληκτρολόγιο,
  *     2. τη στέλνει στον server μέσω του TCP socket,
  *     3. διαβάζει την απάντηση του server ("Received: <κείμενο>") και την τυπώνει.
- *   Αν σταλεί η λέξη "quit", ο server κλείνει τη δική του πλευρά της σύνδεσης.
+ *   Αν σταλεί η λέξη "quit", ο server τερματίζει τη συνεδρία και ο client τελειώνει κι αυτός.
+ *   Ο client τελειώνει επίσης αν ο server κλείσει τη σύνδεση.
  *
  * Εκτέλεση (πρώτα ο server, μετά ο client, σε ξεχωριστά τερματικά):
  *   javac *.java
@@ -36,8 +37,8 @@ public class EchoClient {
     PrintStream out = new PrintStream(sout);
     // Μεταβλητή για την τρέχουσα γραμμή κειμένου
     String line;
-    // Ατέρμονος βρόχος: ο πελάτης συνεχίζει μέχρι να τερματιστεί το πρόγραμμα
-    // (π.χ. με Ctrl+C), αφού στον κώδικα δεν υπάρχει συνθήκη εξόδου
+    // Βρόχος επικοινωνίας: συνεχίζει μέχρι ο χρήστης να στείλει "quit"
+    // ή μέχρι ο server να κλείσει τη σύνδεση (βλ. τους ελέγχους με return παρακάτω)
     while(true) {
         line = "";
         // Βήμα 1: Διαβάζουμε μια γραμμή από το πληκτρολόγιο και τη στέλνουμε στο TCP socket.
@@ -45,19 +46,37 @@ public class EchoClient {
         // με readLine(), δηλαδή περιμένει μέχρι να λάβει τέλος γραμμής.
         try {
             line = in.readLine();
+            // Αν η είσοδος του πληκτρολογίου τελείωσε (Ctrl+Z στα Windows, Ctrl+D σε Linux/macOS),
+            // η readLine() επιστρέφει null και σταματάμε
+            if (line == null)
+                return;
             out.println(line);
         } catch(IOException e) {
             System.out.println(e.getMessage());
         }
+        // Θυμόμαστε αν ο χρήστης έστειλε "quit", για να τερματίσουμε αφού διαβάσουμε την τελευταία απάντηση
+        boolean quit = "quit".equals(line);
         // Βήμα 2: Διαβάζουμε την απάντηση του server από το TCP socket και την τυπώνουμε στο τερματικό.
         // Η readLine() μπλοκάρει (περιμένει) μέχρι να φτάσει ολόκληρη γραμμή από τον server.
         // Σημείωση: η DataInputStream.readLine() είναι deprecated (παρωχημένη) στη Java·
         // στον σύγχρονο κώδικα προτιμάται η BufferedReader.readLine().
         try {
             line = sin.readLine();
+            // Αν ο server έκλεισε τη σύνδεση, η readLine() επιστρέφει null (τέλος της ροής).
+            // Χωρίς αυτόν τον έλεγχο ο βρόχος θα τύπωνε "null" ασταμάτητα.
+            if (line == null) {
+                System.out.println("Server closed the connection.");
+                return;
+            }
             System.out.println(line);
         } catch(IOException e) {
             System.out.println(e.getMessage());
+        }
+        // Αν στάλθηκε "quit", ο server τερματίζει τη συνεδρία, οπότε τελειώνουμε κι εμείς.
+        // Η return επιστρέφει στη main, όπου το finally κλείνει το socket.
+        if (quit) {
+            System.out.println("Session ended.");
+            return;
         }
     }
 }    // Τέλος της μεθόδου echoclient()
