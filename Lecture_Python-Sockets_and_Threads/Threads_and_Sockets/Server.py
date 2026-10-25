@@ -44,12 +44,20 @@ def handle_client(conn, addr):
     connected = True
     while connected:
         # Βήμα 1: λήψη της κεφαλίδας (HEADER bytes), για να μάθουμε πόσα bytes έχει το μήνυμα
-        msg_length = conn.recv(HEADER).decode(FORMAT)
-        # Αν η κεφαλίδα δεν είναι κενή (κενή σημαίνει συνήθως ότι ο πελάτης έκλεισε τη σύνδεση)
+        try:
+            msg_length = conn.recv(HEADER).decode(FORMAT)
+        except ConnectionResetError:
+            # Ο πελάτης έκλεισε απότομα (π.χ. Ctrl+C)· στα Windows αυτό εμφανίζεται ως
+            # ConnectionResetError. Βγαίνουμε από τον βρόχο για να κλείσει η σύνδεση κανονικά.
+            break
+        # Αν η κεφαλίδα δεν είναι κενή, ήρθε νέο μήνυμα.
+        # Κενή απάντηση από τη recv() σημαίνει ότι ο πελάτης έκλεισε τη σύνδεση (βλ. else παρακάτω).
         if msg_length:
             # Μετατροπή του κειμένου σε ακέραιο· η int() αγνοεί τα κενά του padding
             msg_length = int(msg_length)
-            # Βήμα 2: λήψη του πραγματικού μηνύματος, μήκους msg_length bytes
+            # Βήμα 2: λήψη του πραγματικού μηνύματος, μήκους msg_length bytes.
+            # (Για μικρά μηνύματα, όπως εδώ, φτάνει μία recv(). Για μεγάλα μηνύματα η recv() μπορεί
+            # να επιστρέψει λιγότερα bytes, οπότε θα χρειαζόταν βρόχος μέχρι να διαβαστούν όλα.)
             msg = conn.recv(msg_length).decode(FORMAT)
             # Αν ο πελάτης ζήτησε αποσύνδεση, ο βρόχος θα τελειώσει μετά από αυτή την επανάληψη
             if msg == DISCONNECT_MESSAGE:
@@ -59,6 +67,10 @@ def handle_client(conn, addr):
             print(f"[{addr}] {msg}")
             print(f"[{addr}] {msg_length}")
             conn.send("Msg received ".encode(FORMAT)) # Απάντηση (επιβεβαίωση λήψης) στον πελάτη
+        else:
+            # Ο πελάτης έκλεισε τη σύνδεση χωρίς "!DISCONNECT". Τερματίζουμε τον βρόχο,
+            # αλλιώς η recv() θα επέστρεφε συνεχώς κενό και ο βρόχος θα γύριζε ασταμάτητα (100% CPU).
+            connected = False
 
     # Βοηθητικό μήνυμα: ο πελάτης αποσυνδέθηκε
     print(f"[DISCONNECTED] {addr} disconnected.")
