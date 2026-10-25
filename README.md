@@ -8,7 +8,7 @@
 
 Παραδείγματα κώδικα σε **Java** και **Python** για το μάθημα
 [**Δικτυακός Προγραμματισμός** (HMMY105)](https://eclass.uowm.gr/courses/HMMY105/)
-με καθηγητή τoν κ. Άγγελο Μιχάλα του **Τμήματος Ηλεκτρολόγων Μηχανικών και Μηχανικών Υπολογιστών (ΗΜΜΥ)** του
+με καθηγητή τον κ. Άγγελο Μιχάλα του **Τμήματος Ηλεκτρολόγων Μηχανικών και Μηχανικών Υπολογιστών (ΗΜΜΥ)** του
 **Πανεπιστημίου Δυτικής Μακεδονίας**, Ακαδημαϊκό Εξάμηνο 2026–2027.
 
 Τα παραδείγματα καλύπτουν τα βασικά της επικοινωνίας client–server με **TCP** και **UDP sockets**,
@@ -31,7 +31,7 @@ WebProgECE/
 │   └── TimeClientServerUDP/    TimeServer.java, TimeClient.java
 ├── Lecture_Python-Sockets_and_Threads/
 │   ├── TCP_Sockets/            TCPServer.py, TCPClient.py
-│   ├── UDP_Sockets/            UDPServer.py, UDP Client.py
+│   ├── UDP_Sockets/            UDPServer.py, UDPClient.py
 │   └── Threads_and_Sockets/    Server.py, client.py
 ├── LICENSE
 └── README.md
@@ -84,7 +84,7 @@ WebProgECE/
 
 ### 5. UDP Time Server — [`TimeClientServerUDP`](Lecture_Java-Sockets_and_Threads/TimeClientServerUDP)
 Ο **`TimeServer`** ακούει στη θύρα `8505`. Όταν λάβει οποιοδήποτε datagram, απαντά με την τρέχουσα
-ημερομηνία/ώρα του server (μορφή `ημ/μήνας/έτος-ώρα:λεπτά:δευτ.`).
+ημερομηνία/ώρα του server (μορφή `ημ/μήνας/έτος-ώρα:λεπτά:δευτ.` σε 24ωρη μορφή, π.χ. `24/10/2026-20:05:09`).
 Ο **`TimeClient`** στέλνει ένα αίτημα και τυπώνει την ώρα που επέστρεψε ο server.
 
 **Έννοιες:** request/response πάνω από UDP, `Calendar`, μετατροπή `byte[]` ↔ `String`.
@@ -98,7 +98,7 @@ WebProgECE/
 | Φάκελος | Θέμα | Πρωτόκολλο | Θύρα | Αρχεία |
 |---|---|:---:|:---:|---|
 | [`TCP_Sockets`](Lecture_Python-Sockets_and_Threads/TCP_Sockets) | Μετατροπή κειμένου σε κεφαλαία | TCP | `12000` | `TCPServer.py`, `TCPClient.py` |
-| [`UDP_Sockets`](Lecture_Python-Sockets_and_Threads/UDP_Sockets) | Μετατροπή κειμένου σε κεφαλαία | UDP | `12000` | `UDPServer.py`, `UDP Client.py` |
+| [`UDP_Sockets`](Lecture_Python-Sockets_and_Threads/UDP_Sockets) | Μετατροπή κειμένου σε κεφαλαία | UDP | `12000` | `UDPServer.py`, `UDPClient.py` |
 | [`Threads_and_Sockets`](Lecture_Python-Sockets_and_Threads/Threads_and_Sockets) | Πολυνηματικός TCP server με μηνύματα | TCP | `5050` | `Server.py`, `client.py` |
 
 ### 1. TCP Sockets — [`TCP_Sockets`](Lecture_Python-Sockets_and_Threads/TCP_Sockets)
@@ -111,7 +111,7 @@ WebProgECE/
 ### 2. UDP Sockets — [`UDP_Sockets`](Lecture_Python-Sockets_and_Threads/UDP_Sockets)
 Η ίδια λειτουργία πάνω από **UDP** (`SOCK_DGRAM`). Ο **`UDPServer.py`** ακούει στο `127.0.0.1:12000`,
 λαμβάνει ένα πακέτο με `recvfrom()` και απαντά με `sendto()` στη διεύθυνση του αποστολέα.
-Ο **`UDP Client.py`** στέλνει ένα μήνυμα χωρίς να δημιουργήσει σύνδεση και τυπώνει την απάντηση.
+Ο **`UDPClient.py`** στέλνει ένα μήνυμα χωρίς να δημιουργήσει σύνδεση και τυπώνει την απάντηση.
 
 **Έννοιες:** `SOCK_DGRAM`, `sendto()` / `recvfrom()`, διεύθυνση πελάτη `(IP, port)`.
 
@@ -159,11 +159,17 @@ sequenceDiagram
 ## ▶️ Εκτέλεση
 
 Ξεκινήστε **πάντα πρώτα τον server** και μετά τον client, σε **ξεχωριστά τερματικά**.
+Κάθε server τυπώνει όταν ξεκινά τη θύρα στην οποία ακούει, και σταματά με **Ctrl+C**.
+Οι clients τυπώνουν οδηγίες όταν περιμένουν να πληκτρολογήσετε κάτι.
 
 ### Java
 **Προαπαιτούμενα:** **JDK 8** ή νεότερο (`java -version`), προαιρετικά ένα IDE όπως **Eclipse** ή **IntelliJ IDEA**.
 
 Τα αρχεία δεν ανήκουν σε κάποιο `package`, οπότε μεταγλωττίζονται απευθείας μέσα στον φάκελό τους.
+
+> ⚠️ Τα σχόλια του κώδικα είναι στα ελληνικά και τα αρχεία είναι αποθηκευμένα σε **UTF-8**.
+> Αν σε Windows η `javac` εμφανίσει σφάλμα `unmappable character`, μεταγλωττίστε με
+> `javac -encoding UTF-8 *.java` (από τη Java 18 και μετά το UTF-8 είναι η προεπιλογή).
 
 ```bash
 # Τερματικό 1 — Server
@@ -202,11 +208,10 @@ python TCPClient.py
 | Παράδειγμα | Server | Client |
 |---|---|---|
 | `TCP_Sockets` | `python TCPServer.py` | `python TCPClient.py` |
-| `UDP_Sockets` | `python UDPServer.py` | `python "UDP Client.py"` |
+| `UDP_Sockets` | `python UDPServer.py` | `python UDPClient.py` |
 | `Threads_and_Sockets` | `python Server.py` | `python client.py` |
 
-> 💡 Το όνομα `UDP Client.py` περιέχει κενό, γι' αυτό χρειάζονται τα εισαγωγικά.
-> Στο `Threads_and_Sockets` ανοίξτε **πολλούς** `client.py` για να δείτε τον μετρητή `[ACTIVE CONNECTIONS]` να αυξάνεται.
+> 💡 Στο `Threads_and_Sockets` ανοίξτε **πολλούς** `client.py` για να δείτε τον μετρητή `[ACTIVE CONNECTIONS]` να αυξάνεται.
 
 ---
 
