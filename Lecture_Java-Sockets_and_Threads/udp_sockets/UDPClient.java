@@ -38,9 +38,6 @@ public class UDPClient {
         byte[] sendData = new byte[1024];
         byte[] receiveData = new byte[1024];
 
-        // Δημιουργούμε ένα DatagramPacket για τη λήψη δεδομένων από τον διακομιστή.
-        // (Το πακέτο αυτό δεν χρησιμοποιείται παρακάτω· η λήψη γίνεται με το receivePacket1.)
-        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 
 
         // Βοηθητικό μήνυμα: λέει στον χρήστη ότι το πρόγραμμα περιμένει να πληκτρολογήσει κάτι
@@ -69,10 +66,10 @@ public class UDPClient {
         clientSocket.receive(receivePacket1);
 
         // Μετατρέπουμε τα δεδομένα που λάβαμε σε String.
-        // Η getData() επιστρέφει ΟΛΟ τον buffer των 1024 bytes, οπότε το String περιέχει και τα
-        // αχρησιμοποίητα μηδενικά bytes μετά το κείμενο. Το πραγματικό μήκος των δεδομένων
-        // δίνεται από τη receivePacket1.getLength().
-        String modifiedSentence = new String(receivePacket1.getData());
+        // Η getData() επιστρέφει ΟΛΟ τον buffer των 1024 bytes, ενώ η getLength() δίνει πόσα bytes
+        // ήρθαν πραγματικά. Μετατρέπουμε μόνο αυτά, ώστε να μη μπουν στο String τα αχρησιμοποίητα
+        // μηδενικά bytes μετά το κείμενο.
+        String modifiedSentence = new String(receivePacket1.getData(), 0, receivePacket1.getLength());
 
         // Τυπώνουμε την απάντηση του διακομιστή
         System.out.println("FROM SERVER:" + modifiedSentence);

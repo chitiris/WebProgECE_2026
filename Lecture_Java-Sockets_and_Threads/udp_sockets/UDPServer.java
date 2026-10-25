@@ -40,9 +40,10 @@ public class UDPServer {
             serverSocket.receive(receivePacket);
 
             // Μετατρέπουμε τα δεδομένα που λάβαμε σε συμβολοσειρά (String).
-            // Η getData() επιστρέφει όλο τον buffer των 1024 bytes, άρα το String περιέχει και τα
-            // μηδενικά bytes μετά το κείμενο (το πραγματικό μήκος δίνει η receivePacket.getLength()).
-            String sentence = new String(receivePacket.getData());
+            // Η getData() επιστρέφει όλο τον buffer των 1024 bytes, ενώ η getLength() δίνει πόσα bytes
+            // ήρθαν πραγματικά. Μετατρέπουμε μόνο αυτά (από τη θέση 0, πλήθος getLength()), ώστε το
+            // String να μην περιέχει τα αχρησιμοποίητα μηδενικά bytes μετά το κείμενο.
+            String sentence = new String(receivePacket.getData(), 0, receivePacket.getLength());
             // Από το ίδιο το πακέτο μαθαίνουμε τη διεύθυνση IP και τη θύρα του πελάτη,
             // για να ξέρουμε πού να στείλουμε την απάντηση
             InetAddress IPAddress = receivePacket.getAddress();
