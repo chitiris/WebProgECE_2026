@@ -1,40 +1,59 @@
+# =============================================================================
+# client.py — Πελάτης (client) για τον πολυνηματικό Server.py.
+#
+# Τι κάνει:
+#   Συνδέεται στον Server.py (θύρα 5050) και στέλνει μερικά μηνύματα με το πρωτόκολλο του
+#   server: πρώτα μια κεφαλίδα 64 bytes με το μήκος του μηνύματος και μετά το μήνυμα.
+#   Στέλνει τρία προκαθορισμένα μηνύματα (πατώντας Enter ανάμεσα), ένα μήνυμα του χρήστη
+#   και στο τέλος το "!DISCONNECT" για αποσύνδεση.
+#
+# Εκτέλεση (πρώτα ο server):
+#   python Server.py
+#   python client.py      (ανοίξτε πολλά για να δείτε το [ACTIVE CONNECTIONS] να αυξάνεται)
+#
+# ΠΡΟΣΟΧΗ: η μεταβλητή SERVER πρέπει να έχει τη διεύθυνση IP του υπολογιστή όπου τρέχει ο
+# Server.py (τυπώνεται στο μήνυμα [LISTENING] του server).
+#
+# Βασικές έννοιες: connect(), message framing με κεφαλίδα μήκους, encode()/decode().
+# =============================================================================
 import socket
 
-# Ορισμός σταθερών
-HEADER = 64  # Μέγεθος του μηνύματος μήκους που θα σταλεί στον διακομιστή
-PORT = 5050  # Θύρα σύνδεσης
-FORMAT = 'utf-8'  # Μορφή κωδικοποίησης (UTF-8 στην περίπτωση αυτή)
-DISCONNECT_MESSAGE = "!DISCONNECT"  # Μήνυμα αποσύνδεσης
-SERVER = "192.168.44.164"  # Ορισμός της διεύθυνσης IP του διακομιστή (θα πρέπει να ορίσετε τη δική σας διεύθυνση IP)
-ADDR = (SERVER, PORT)
+# Σταθερές του πρωτοκόλλου (πρέπει να είναι ίδιες με του Server.py)
+HEADER = 64  # Μήκος σε bytes της κεφαλίδας που περιέχει το μήκος του μηνύματος
+PORT = 5050  # Θύρα του διακομιστή
+FORMAT = 'utf-8'  # Κωδικοποίηση κειμένου σε bytes (UTF-8)
+DISCONNECT_MESSAGE = "!DISCONNECT"  # Ειδικό μήνυμα αποσύνδεσης
+SERVER = "192.168.44.164"  # Διεύθυνση IP του διακομιστή (αλλάξτε τη στη δική σας, βλ. [LISTENING] στον server)
+ADDR = (SERVER, PORT)  # Πλειάδα (IP, θύρα) για τη σύνδεση
 
-# Δημιουργία socket για τη σύνδεση στον διακομιστή
+# Δημιουργία socket (IPv4, TCP) και σύνδεση στον διακομιστή
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(ADDR)  # Σύνδεση στον διακομιστή
+client.connect(ADDR)  # Σύνδεση στον διακομιστή (three-way handshake του TCP)
 
-# Συνάρτηση για την αποστολή μηνυμάτων στον διακομιστή
+# Συνάρτηση που στέλνει ένα μήνυμα στον διακομιστή σύμφωνα με το πρωτόκολλο:
+# πρώτα κεφαλίδα HEADER bytes με το μήκος, μετά το ίδιο το μήνυμα.
 def send(msg):
     message = msg.encode(FORMAT)  # Κωδικοποίηση του μηνύματος σε bytes
-    msg_length = len(message)  # Υπολογισμός του μήκους του μηνύματος
-    send_length = str(msg_length).encode(FORMAT)  # Κωδικοποίηση του μήκους του μηνύματος σε bytes
-    send_length += b' ' * (HEADER - len(send_length)) # pad spaces at the end of the send_length string to finally hecontain Header characters
-    # Αποστολή του μήκους του μηνύματος προς τον διακομιστή
+    msg_length = len(message)  # Μήκος του μηνύματος σε bytes (όχι σε χαρακτήρες: στο UTF-8 ένα ελληνικό γράμμα πιάνει 2 bytes)
+    send_length = str(msg_length).encode(FORMAT)  # Το μήκος ως κείμενο, κωδικοποιημένο σε bytes (π.χ. b'12')
+    send_length += b' ' * (HEADER - len(send_length)) # Συμπλήρωση με κενά στο τέλος, ώστε η κεφαλίδα να έχει ακριβώς HEADER bytes
+    # Αποστολή της κεφαλίδας με το μήκος του μηνύματος
     client.send(send_length)
-    # Αποστολή του πραγματικού μηνύματος προς τον διακομιστή
+    # Αποστολή του πραγματικού μηνύματος
     client.send(message)
-    # Εκτύπωση της απάντησης από τον διακομιστή (εφόσον υπάρχει)
+    # Λήψη και εκτύπωση της απάντησης του διακομιστή (έως 2048 bytes)
     print(client.recv(2048).decode(FORMAT))
 
-# Κώδικας για την είσοδο μηνυμάτων από τον χρήστη και αποστολή τους στον διακομιστή
+# Αποστολή μηνυμάτων στον διακομιστή
 
-send("Hello World!") #change 1st Message
-input() #Waiting to Press Enter
-send("Hello Everyone!") #change 2nd Message
+send("Hello World!") # 1ο μήνυμα (μπορείτε να το αλλάξετε)
+input() # Αναμονή μέχρι να πατηθεί Enter
+send("Hello Everyone!") # 2ο μήνυμα (μπορείτε να το αλλάξετε)
 input()
-send("Hello tHMMY!") #change 3rd Message
+send("Hello tHMMY!") # 3ο μήνυμα (μπορείτε να το αλλάξετε)
 print('Type Something and Press Enter')
-#Type Something and press enter
+# Ο χρήστης πληκτρολογεί ένα μήνυμα και πατά Enter· το μήνυμα στέλνεται στον διακομιστή
 send(input())
 
-# Αποστολή μηνύματος αποσύνδεσης στον διακομιστή
+# Αποστολή του μηνύματος αποσύνδεσης στον διακομιστή
 send(DISCONNECT_MESSAGE)

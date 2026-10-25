@@ -1,50 +1,83 @@
+# =============================================================================
+# Server.py — Πολυνηματικός (multithreaded) διακομιστής TCP σε Python.
+#
+# Τι κάνει:
+#   Ακούει στη θύρα 5050, στη διεύθυνση IP του υπολογιστή. Για κάθε νέο πελάτη ξεκινά ένα νέο
+#   νήμα (threading.Thread), ώστε να εξυπηρετεί πολλούς πελάτες ταυτόχρονα.
+#   Χρησιμοποιεί ένα απλό πρωτόκολλο εφαρμογής (βλ. και client.py):
+#     1. ο πελάτης στέλνει πρώτα μια κεφαλίδα (header) σταθερού μήκους 64 bytes, που περιέχει
+#        το μήκος του μηνύματος ως κείμενο, συμπληρωμένο με κενά (π.χ. "12" + 62 κενά),
+#     2. και μετά το ίδιο το μήνυμα.
+#   Το TCP είναι ροή bytes χωρίς όρια μηνυμάτων, οπότε η κεφαλίδα λέει στον server πόσα bytes
+#   να διαβάσει (πλαισίωση μηνυμάτων, message framing).
+#   Το μήνυμα "!DISCONNECT" τερματίζει τη σύνδεση.
+#
+# Εκτέλεση: python Server.py  και μετά ένας ή περισσότεροι  python client.py
+#   Η διεύθυνση IP του server τυπώνεται στο μήνυμα [LISTENING] και πρέπει να γραφτεί
+#   στη μεταβλητή SERVER του client.py.
+#
+# Βασικές έννοιες: threading.Thread, threading.active_count(), message framing, UTF-8.
+# =============================================================================
 import socket
 import threading
 
-# Ορισμός των σταθερών που χρησιμοποιούνται στον κώδικα
-HEADER = 64
-PORT = 5050
+# Σταθερές του πρωτοκόλλου (πρέπει να είναι ίδιες στον server και στον client)
+HEADER = 64  # Μήκος σε bytes της κεφαλίδας που περιέχει το μήκος του μηνύματος
+PORT = 5050  # Θύρα στην οποία ακούει ο server
+# Η διεύθυνση IP του υπολογιστή: η gethostname() δίνει το όνομα του υπολογιστή και η
+# gethostbyname() το μετατρέπει σε διεύθυνση IPv4 (σε κάποια συστήματα μπορεί να δώσει 127.x.x.x)
 SERVER = socket.gethostbyname(socket.gethostname())
-ADDR = (SERVER, PORT)
-FORMAT = 'utf-8'
-DISCONNECT_MESSAGE = "!DISCONNECT"
+ADDR = (SERVER, PORT)  # Πλειάδα (IP, θύρα) για το bind()
+FORMAT = 'utf-8'  # Κωδικοποίηση για τη μετατροπή κειμένου σε bytes και αντίστροφα
+DISCONNECT_MESSAGE = "!DISCONNECT"  # Ειδικό μήνυμα με το οποίο ο πελάτης ζητά αποσύνδεση
 
-# Δημιουργία του socket του διακομιστή και δέσμευση της διεύθυνσης και της θύρας
+# Δημιουργία του socket του διακομιστή (IPv4, TCP) και δέσμευσή του στη διεύθυνση και στη θύρα
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
-# Συνάρτηση που χειρίζεται τη σύνδεση ενός πελάτη
+# Συνάρτηση που εξυπηρετεί έναν πελάτη. Εκτελείται σε ξεχωριστό νήμα για κάθε πελάτη.
+#   conn : το socket της σύνδεσης με τον πελάτη
+#   addr : η διεύθυνση του πελάτη, ως πλειάδα (IP, θύρα)
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
 
     connected = True
     while connected:
-        # Λήψη του μήνυματος μήκους HEADER για να γνωρίζουμε πόσα δεδομένα περιμένουμε
+        # Βήμα 1: λήψη της κεφαλίδας (HEADER bytes), για να μάθουμε πόσα bytes έχει το μήνυμα
         msg_length = conn.recv(HEADER).decode(FORMAT)
+        # Αν η κεφαλίδα δεν είναι κενή (κενή σημαίνει συνήθως ότι ο πελάτης έκλεισε τη σύνδεση)
         if msg_length:
+            # Μετατροπή του κειμένου σε ακέραιο· η int() αγνοεί τα κενά του padding
             msg_length = int(msg_length)
-            # Λήψη του πραγματικού μηνύματος
+            # Βήμα 2: λήψη του πραγματικού μηνύματος, μήκους msg_length bytes
             msg = conn.recv(msg_length).decode(FORMAT)
+            # Αν ο πελάτης ζήτησε αποσύνδεση, ο βρόχος θα τελειώσει μετά από αυτή την επανάληψη
             if msg == DISCONNECT_MESSAGE:
                 connected = False
 
+            # Εκτύπωση του μηνύματος και του μήκους του, μαζί με τη διεύθυνση του πελάτη
             print(f"[{addr}] {msg}")
             print(f"[{addr}] {msg_length}")
-            conn.send("Msg received ".encode(FORMAT)) #response
+            conn.send("Msg received ".encode(FORMAT)) # Απάντηση (επιβεβαίωση λήψης) στον πελάτη
 
+    # Κλείσιμο της σύνδεσης με τον πελάτη· μετά το νήμα τερματίζει
     conn.close()
 
-# Συνάρτηση που εκκινεί τον διακομιστή και αναμένει για συνδέσεις
+# Συνάρτηση που ξεκινά τον διακομιστή και περιμένει συνδέσεις
 def start():
+    # Το socket αρχίζει να ακούει για εισερχόμενες συνδέσεις
     server.listen()
     print(f"[LISTENING] Server is listening on {SERVER}")
     while True:
+        # Η accept() περιμένει μέχρι να συνδεθεί πελάτης και επιστρέφει νέο socket και διεύθυνση
         conn, addr = server.accept()
-        # Δημιουργία νέου thread για να χειρίζεται τη σύνδεση του πελάτη
+        # Δημιουργία νέου νήματος που θα εκτελέσει την handle_client για αυτόν τον πελάτη.
+        # Έτσι το κύριο νήμα επιστρέφει αμέσως στην accept() για τον επόμενο πελάτη.
         thread = threading.Thread(target=handle_client, args=(conn, addr))
         thread.start()
+        # Πλήθος ενεργών συνδέσεων: όλα τα ενεργά νήματα μείον 1 (το κύριο νήμα)
         print(f"[ACTIVE CONNECTIONS] {threading.active_count() - 1}")
 
-# Ξεκίνησε τον διακομιστή
+# Εκκίνηση του διακομιστή
 print("[STARTING] server is starting...")
 start()
