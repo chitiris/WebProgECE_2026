@@ -1,0 +1,2 @@
+# Τα shell scripts έχουν πάντα αλλαγές γραμμής Linux (LF), ώστε να τρέχουν σωστά στο bash (Linux / WSL)
+*.sh text eol=lf
