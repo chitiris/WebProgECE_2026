@@ -18,7 +18,7 @@
  *
  * Βασικές έννοιες: Socket, ροές εισόδου/εξόδου (streams) πάνω από TCP, try/catch/finally.
  */
-import java.io.*;   // Κλάσεις εισόδου/εξόδου: DataInputStream, DataOutputStream, PrintStream, IOException
+import java.io.*;   // Κλάσεις εισόδου/εξόδου: BufferedReader, InputStreamReader, DataOutputStream, PrintStream, IOException
 import java.net.*;  // Κλάσεις δικτύου: Socket
 
 public class EchoClient {
@@ -27,11 +27,12 @@ public class EchoClient {
      *   sin  : ροή εισόδου από το socket (ό,τι στέλνει ο server)
      *   sout : ροή εξόδου προς το socket (ό,τι στέλνουμε στον server)
      */
-    public static void echoclient(DataInputStream sin,
+    public static void echoclient(BufferedReader sin,
             DataOutputStream sout) throws IOException
 {
-    // Ροή εισόδου από το πληκτρολόγιο (System.in)
-    DataInputStream in = new DataInputStream(System.in);
+    // Ροή εισόδου από το πληκτρολόγιο (System.in). Η InputStreamReader μετατρέπει τα bytes σε
+    // χαρακτήρες και η BufferedReader μάς δίνει τη readLine() για ανάγνωση ολόκληρης γραμμής.
+    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     // Τυλίγουμε τη ροή εξόδου του socket σε PrintStream, ώστε να μπορούμε να
     // στέλνουμε ολόκληρες γραμμές κειμένου με println() (προσθέτει αυτόματα '\n')
     PrintStream out = new PrintStream(sout);
@@ -58,8 +59,6 @@ public class EchoClient {
         boolean quit = "quit".equals(line);
         // Βήμα 2: Διαβάζουμε την απάντηση του server από το TCP socket και την τυπώνουμε στο τερματικό.
         // Η readLine() μπλοκάρει (περιμένει) μέχρι να φτάσει ολόκληρη γραμμή από τον server.
-        // Σημείωση: η DataInputStream.readLine() είναι deprecated (παρωχημένη) στη Java·
-        // στον σύγχρονο κώδικα προτιμάται η BufferedReader.readLine().
         try {
             line = sin.readLine();
             // Αν ο server έκλεισε τη σύνδεση, η readLine() επιστρέφει null (τέλος της ροής).
@@ -94,8 +93,8 @@ public static void main(String[] args)
         s = new Socket(hostname, 8205);
         // Δημιουργούμε ροές για ανάγνωση και εγγραφή γραμμών κειμένου
         // από και προς αυτό το socket
-        DataInputStream sin =
-            new DataInputStream(s.getInputStream());
+        BufferedReader sin =
+            new BufferedReader(new InputStreamReader(s.getInputStream()));
         DataOutputStream sout =
             new DataOutputStream(s.getOutputStream());
         // Ενημερώνουμε τον χρήστη ότι συνδεθήκαμε, τυπώνοντας τη διεύθυνση IP και τη θύρα του server

@@ -17,7 +17,7 @@
  * Βασικές έννοιες: ServerSocket, accept(), νήμα ανά πελάτη, extends Thread, try/finally.
  */
 import java.net.*;   // ServerSocket, Socket
-import java.io.*;    // DataInputStream, PrintStream, IOException
+import java.io.*;    // BufferedReader, InputStreamReader, PrintStream, IOException
 import java.lang.*;  // Εισάγεται πάντα αυτόματα στη Java, άρα αυτό το import δεν χρειάζεται
 import java.util.*;  // Δεν χρησιμοποιείται κάποια κλάση του σε αυτό το αρχείο
 
@@ -69,7 +69,9 @@ class EchoThread extends Thread {
 
         try {
             // Ροή εισόδου: ό,τι στέλνει ο πελάτης μέσω του socket
-            DataInputStream in = new DataInputStream(s.getInputStream());
+            // Η InputStreamReader μετατρέπει τα bytes σε χαρακτήρες και η BufferedReader μάς δίνει
+            // τη readLine(), που διαβάζει μια ολόκληρη γραμμή (μέχρι το '\n').
+            BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             // Ροή εξόδου: ό,τι στέλνουμε στον πελάτη (PrintStream για εύκολη αποστολή γραμμών)
             PrintStream out = new PrintStream(s.getOutputStream());
 
