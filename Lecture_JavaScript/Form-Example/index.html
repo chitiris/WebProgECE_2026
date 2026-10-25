@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φόρμα Επικοινωνίας</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1 class="form-title">Φόρμα Επικοινωνίας</h1>
+        <ol class="form-instructions">
+            <li>Συμπληρώστε το όνομά σας στο πεδίο "Όνομα".</li>
+            <li>Εισάγετε ένα έγκυρο email στο πεδίο "Email".</li>
+            <li>Γράψτε το μήνυμά σας στο πεδίο "Μήνυμα".</li>
+            <li>Πατήστε το κουμπί "Υποβολή" για να στείλετε τη φόρμα.
+            <ul>
+                <li>Μην αφήσετε κενό το πεδίο "Όνομα".</li>
+                <li>Βεβαιωθείτε ότι το πεδίο "Email" περιέχει έγκυρη διεύθυνση.</li>
+                <li>Το πεδίο "Μήνυμα" πρέπει να περιέχει κείμενο.</li>
+            </ul>
+            </li>
+        </ol>
+        <form id="contactForm" action="#" method="post">
+            <label for="name">Όνομα:</label>
+            <input type="text" id="name" name="name" placeholder="Εισάγετε το Όνομα σας" required>
+            
+            <label for="email">e-mail:</label>
+            <input type="email" id="email" name="email" placeholder="Εισάγετε το e-mail σας" required>
+            
+            <label for="message">Μήνυμα:</label>
+            <textarea id="message" name="message" placeholder="Γράψτε το μήνυμά σας" required></textarea>
+            
+            <button type="submit">Υποβολή</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+/* Βασικές ρυθμίσεις */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+/* Κοντέινερ φόρμας */
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Τίτλος φόρμας */
+.form-title {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+/* Στυλ για ετικέτες */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Textboxes και textarea */
+input[type="text"], 
+input[type="email"], 
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ffffff;
+    font-size: 14px;
+}
+
+/* Κουμπί υποβολής */
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect */
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Όταν πατηθεί το κουμπί */
+button:active {
+    background-color: #28a745;
+}
+/* Στυλ για τη λίστα οδηγιών */
+.form-instructions {
+    margin-bottom: 20px;
+    padding-left: 20px;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.form-instructions li {
+    margin-bottom: 10px;
+}
+
+/* Στυλ για τη λίστα οδηγιών */
+.form-instructions {
+    margin-bottom: 20px;
+    padding-left: 20px;
+    margin-right: 30px; /* Αυξάνει το κενό δεξιά */
+    margin-left: 30px; /* Αυξάνει το κενό αριστερά */
+    color: #555;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.form-instructions li {
+    margin-bottom: 10px;
+}
+
+/* Textboxes και textarea */
+input[type="text"], 
+input[type="email"], 
+textarea {
+    width: calc(100% - 60px); /* Προσαρμόζει το πλάτος για να αφήσει περιθώρια */
+    margin-left: 30px; /* Κεντράρει σύμφωνα με τις οδηγίες */
+    margin-right: 30px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ffffff;
+    font-size: 14px;
+}

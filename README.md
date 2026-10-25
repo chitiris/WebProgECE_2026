@@ -34,6 +34,8 @@ WebProgECE/
 │   ├── TCP_Sockets/            TCPServer.py, TCPClient.py
 │   ├── UDP_Sockets/            UDPServer.py, UDPClient.py
 │   └── Threads_and_Sockets/    Server.py, client.py
+├── Lecture_JavaScript/
+│   └── Form-Example/           index.html, styles.css, script.js
 ├── LICENSE
 └── README.md
 ```
@@ -127,6 +129,25 @@ WebProgECE/
 
 > ⚠️ Στο `client.py` η μεταβλητή `SERVER` έχει μια συγκεκριμένη IP (`192.168.44.164`).
 > Αλλάξτε τη στη διεύθυνση IP του υπολογιστή όπου τρέχει ο `Server.py` (τυπώνεται στο μήνυμα `[LISTENING]`).
+
+---
+
+## 🟨 JavaScript
+
+📁 [`Lecture_JavaScript`](Lecture_JavaScript)
+
+| Φάκελος | Θέμα | Αρχεία |
+|---|---|---|
+| [`Form-Example`](Lecture_JavaScript/Form-Example) | Φόρμα επικοινωνίας με έλεγχο πεδίων (validation) | `index.html`, `styles.css`, `script.js` |
+
+### 1. Φόρμα επικοινωνίας — [`Form-Example`](Lecture_JavaScript/Form-Example)
+Μια responsive φόρμα με πεδία **Όνομα**, **Email** και **Μήνυμα**. Πριν από την υποβολή, το **`script.js`**
+ελέγχει ότι όλα τα πεδία είναι συμπληρωμένα και ότι το email έχει σωστή μορφή, με μια κανονική έκφραση
+(regular expression) που εξηγείται βήμα-βήμα στα σχόλια του κώδικα.
+
+**Έννοιες:** `addEventListener('submit', …)`, `event.preventDefault()`, `trim()`, regular expressions, `form.reset()`.
+
+**Εκτέλεση:** ανοίξτε το `index.html` σε έναν browser. Δεν χρειάζεται εγκατάσταση ή server.
 
 ---
 
@@ -257,6 +278,7 @@ python TCPClient.py
 - 🐍 [Python Docs — `socket` — Low-level networking interface](https://docs.python.org/3/library/socket.html)
 - 🐍 [Python Docs — Socket Programming HOWTO](https://docs.python.org/3/howto/sockets.html)
 - 🐍 [Python Docs — `threading` — Thread-based parallelism](https://docs.python.org/3/library/threading.html)
+- 🟨 [MDN — Client-side form validation](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Form_validation)
 
 ---
 
