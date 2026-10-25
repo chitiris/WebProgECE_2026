@@ -82,6 +82,8 @@ public static void main(String[] args)
         // Ενημερώνουμε τον χρήστη ότι συνδεθήκαμε, τυπώνοντας τη διεύθυνση IP και τη θύρα του server
         System.out.println("Connected to " +
             s.getInetAddress() + ":" + s.getPort());
+        // Βοηθητικό μήνυμα: οδηγίες χρήσης για τον χρήστη
+        System.out.println("Type a line and press Enter. Type quit to end the session.");
         // Ξεκινάμε την επικοινωνία με τον echo server
         echoclient(sin, sout);
     } catch(IOException e) {

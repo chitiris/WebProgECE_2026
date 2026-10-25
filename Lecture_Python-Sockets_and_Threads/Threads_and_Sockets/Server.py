@@ -60,6 +60,8 @@ def handle_client(conn, addr):
             print(f"[{addr}] {msg_length}")
             conn.send("Msg received ".encode(FORMAT)) # Απάντηση (επιβεβαίωση λήψης) στον πελάτη
 
+    # Βοηθητικό μήνυμα: ο πελάτης αποσυνδέθηκε
+    print(f"[DISCONNECTED] {addr} disconnected.")
     # Κλείσιμο της σύνδεσης με τον πελάτη· μετά το νήμα τερματίζει
     conn.close()
 
@@ -68,6 +70,9 @@ def start():
     # Το socket αρχίζει να ακούει για εισερχόμενες συνδέσεις
     server.listen()
     print(f"[LISTENING] Server is listening on {SERVER}")
+    # Βοηθητικά μηνύματα: η θύρα, τι πρέπει να ρυθμιστεί στο client.py και πώς σταματά ο server
+    print(f"[INFO] Port {PORT}. In client.py set SERVER = \"{SERVER}\"")
+    print("[INFO] Waiting for clients... (press Ctrl+C to stop)")
     while True:
         # Η accept() περιμένει μέχρι να συνδεθεί πελάτης και επιστρέφει νέο socket και διεύθυνση
         conn, addr = server.accept()

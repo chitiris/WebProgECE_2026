@@ -28,6 +28,9 @@ public class EchoServer {
             // Δημιουργούμε το "socket υποδοχής" (ServerSocket) που ακούει στη θύρα 8205.
             // Αυτό δεν χρησιμοποιείται για ανταλλαγή δεδομένων, μόνο για την αποδοχή νέων συνδέσεων.
             ServerSocket serversoc = new ServerSocket(8205);
+            // Βοηθητικά μηνύματα: ο server ξεκίνησε, σε ποια θύρα ακούει και πώς σταματά
+            System.out.println("Echo Server is ON");
+            System.out.println("Listening on port 8205. Waiting for clients... (press Ctrl+C to stop)");
 
             // Ο server μένει σε έναν ατέρμονο βρόχο και περιμένει αιτήσεις σύνδεσης...
             while (true) {

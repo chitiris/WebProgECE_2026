@@ -34,6 +34,8 @@ public class TCPClient  {
         // Ο κατασκευαστής εκτελεί αμέσως τη σύνδεση TCP (three-way handshake) με τον
         // υπολογιστή "localhost" (127.0.0.1) στη θύρα 6789, όπου ακούει ο TCPServer.
         Socket clientSocket = new Socket("localhost", 6789);
+        // Βοηθητικό μήνυμα: επιβεβαιώνει στον χρήστη ότι η σύνδεση με τον server πέτυχε
+        System.out.println("Connected to TCP server localhost:6789");
 
         // Δημιουργούμε ένα αντικείμενο DataOutputStream για την αποστολή δεδομένων προς τον διακομιστή
         // (ροή εξόδου που "γράφει" μέσα στο socket)
@@ -44,6 +46,8 @@ public class TCPClient  {
         // (ροή εισόδου που "διαβάζει" από το socket)
         BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+        // Βοηθητικό μήνυμα: λέει στον χρήστη ότι το πρόγραμμα περιμένει να πληκτρολογήσει κάτι
+        System.out.println("Type a sentence in lowercase and press Enter:");
         // Διαβάζουμε μία γραμμή από τον χρήστη (περιμένει μέχρι να πατηθεί Enter)
         sentence = inFromUser.readLine();
 

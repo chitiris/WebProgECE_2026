@@ -43,6 +43,8 @@ public class UDPClient {
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 
 
+        // Βοηθητικό μήνυμα: λέει στον χρήστη ότι το πρόγραμμα περιμένει να πληκτρολογήσει κάτι
+        System.out.println("Type a sentence in lowercase and press Enter:");
         // Διαβάζουμε μία γραμμή κειμένου από τον χρήστη
         String sentence = inFromUser.readLine();
 
@@ -56,6 +58,8 @@ public class UDPClient {
 
         // Στέλνουμε το πακέτο στον διακομιστή. Το UDP δεν εγγυάται ότι θα φτάσει.
         clientSocket.send(sendPacket);
+        // Βοηθητικό μήνυμα: το πακέτο στάλθηκε και ο client περιμένει απάντηση
+        System.out.println("Sent to UDP server localhost:9876. Waiting for reply...");
 
         // Δημιουργούμε DatagramPacket για τη λήψη της απάντησης από τον διακομιστή
         DatagramPacket receivePacket1 = new DatagramPacket(receiveData, receiveData.length);

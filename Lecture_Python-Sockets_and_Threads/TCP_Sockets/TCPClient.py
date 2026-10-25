@@ -32,6 +32,8 @@ clientSocket = socket(AF_INET, SOCK_STREAM)
 # τη χειραψία τριών βημάτων (three-way handshake) του TCP. Αν ο server δεν τρέχει,
 # προκύπτει σφάλμα ConnectionRefusedError.
 clientSocket.connect((serverName, serverPort))
+# Βοηθητικό μήνυμα: επιβεβαιώνει στον χρήστη ότι η σύνδεση με τον server πέτυχε
+print("Connected to TCP server", serverName, "port", serverPort)
 
 # Ζητάμε από τον χρήστη να πληκτρολογήσει μια πρόταση
 sentence = input('Input lowercase sentence:')

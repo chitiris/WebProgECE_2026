@@ -30,6 +30,9 @@ public class TimeServer {
         // Δημιουργούμε το socket που ακούει στη θύρα 8505
         try {
             s = new DatagramSocket(8505);
+            // Βοηθητικά μηνύματα: ο server ξεκίνησε, σε ποια θύρα ακούει και πώς σταματά
+            System.out.println("Time Server is ON");
+            System.out.println("Listening on port 8505. Waiting for time requests... (press Ctrl+C to stop)");
         } catch(Exception e) {
             // Π.χ. αν η θύρα 8505 χρησιμοποιείται ήδη από άλλο πρόγραμμα
             System.out.println("Error : " +

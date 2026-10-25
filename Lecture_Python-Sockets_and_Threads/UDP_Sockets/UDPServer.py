@@ -29,6 +29,8 @@ serverSocket.bind(("127.0.0.1", serverPort))
 
 # Μήνυμα ότι ο διακομιστής είναι έτοιμος να δεχτεί πακέτα
 print("The server is ready to receive")
+# Βοηθητικό μήνυμα: σε ποια διεύθυνση/θύρα ακούει ο server και πώς σταματά
+print("Listening on 127.0.0.1 port", serverPort, "- waiting for packets... (press Ctrl+C to stop)")
 
 # Ατέρμονος βρόχος για την εξυπηρέτηση των πακέτων που έρχονται από τους πελάτες
 while True:
@@ -37,6 +39,8 @@ while True:
  #   message       : τα δεδομένα του πακέτου (bytes)
  #   clientAddress : τη διεύθυνση του πελάτη που το έστειλε, ως πλειάδα (IP, θύρα)
  message, clientAddress = serverSocket.recvfrom(2048)
+ # Βοηθητικό μήνυμα: από ποια διεύθυνση (IP, θύρα) ήρθε το πακέτο
+ print("Packet received from", clientAddress)
  print(message.decode())
 
  # Μετατροπή του μηνύματος από bytes σε string (decode) και στη συνέχεια σε κεφαλαία γράμματα

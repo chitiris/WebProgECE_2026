@@ -29,6 +29,7 @@ ADDR = (SERVER, PORT)  # Πλειάδα (IP, θύρα) για τη σύνδεσ�
 # Δημιουργία socket (IPv4, TCP) και σύνδεση στον διακομιστή
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(ADDR)  # Σύνδεση στον διακομιστή (three-way handshake του TCP)
+print(f"[CONNECTED] Connected to server {SERVER}:{PORT}")  # Βοηθητικό μήνυμα: η σύνδεση πέτυχε
 
 # Συνάρτηση που στέλνει ένα μήνυμα στον διακομιστή σύμφωνα με το πρωτόκολλο:
 # πρώτα κεφαλίδα HEADER bytes με το μήκος, μετά το ίδιο το μήνυμα.
@@ -47,8 +48,10 @@ def send(msg):
 # Αποστολή μηνυμάτων στον διακομιστή
 
 send("Hello World!") # 1ο μήνυμα (μπορείτε να το αλλάξετε)
+print('Press Enter to send the next message') # Βοηθητικό μήνυμα: τι περιμένει το πρόγραμμα
 input() # Αναμονή μέχρι να πατηθεί Enter
 send("Hello Everyone!") # 2ο μήνυμα (μπορείτε να το αλλάξετε)
+print('Press Enter to send the next message') # Βοηθητικό μήνυμα: τι περιμένει το πρόγραμμα
 input()
 send("Hello tHMMY!") # 3ο μήνυμα (μπορείτε να το αλλάξετε)
 print('Type Something and Press Enter')
@@ -57,3 +60,4 @@ send(input())
 
 # Αποστολή του μηνύματος αποσύνδεσης στον διακομιστή
 send(DISCONNECT_MESSAGE)
+print("[DISCONNECTED] Disconnected from server")  # Βοηθητικό μήνυμα: τέλος της επικοινωνίας

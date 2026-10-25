@@ -23,6 +23,8 @@ public class UDPServer {
 
         // Μήνυμα που δείχνει ότι ο UDP server είναι ενεργός
         System.out.println("UDP Server is ON");
+        // Βοηθητικά μηνύματα: σε ποια θύρα ακούει ο server και πώς σταματά
+        System.out.println("Listening on port 9876. Waiting for packets... (press Ctrl+C to stop)");
 
         // Ατέρμονος βρόχος: ο server εξυπηρετεί το ένα πακέτο μετά το άλλο
         while (true) {
@@ -45,6 +47,8 @@ public class UDPServer {
             // για να ξέρουμε πού να στείλουμε την απάντηση
             InetAddress IPAddress = receivePacket.getAddress();
             int port = receivePacket.getPort();
+            // Βοηθητικό μήνυμα: από ποια διεύθυνση IP και θύρα ήρθε το πακέτο
+            System.out.println("Packet received from " + IPAddress + ":" + port);
 
             // Μετατρέπουμε τη συμβολοσειρά σε κεφαλαία γράμματα και την τυπώνουμε
             String capitalizedSentence = sentence.toUpperCase();

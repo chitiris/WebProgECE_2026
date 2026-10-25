@@ -24,12 +24,16 @@ public class TCPServer  {
         // Αυτό δεν ανταλλάσσει δεδομένα· χρησιμοποιείται μόνο για να δέχεται νέες συνδέσεις πελατών.
         ServerSocket welcomeSocket = new ServerSocket(6789);
         System.out.println("TCP Server is ON");
+        // Βοηθητικά μηνύματα: σε ποια θύρα ακούει ο server και πώς σταματά
+        System.out.println("Listening on port 6789. Waiting for a client... (press Ctrl+C to stop)");
 
         // Ατέρμονος βρόχος: ο server εξυπηρετεί τον έναν πελάτη μετά τον άλλον
         while (true) {
             // Η accept() μπλοκάρει μέχρι να συνδεθεί ένας πελάτης. Τότε επιστρέφει ένα ΝΕΟ socket
             // (connection socket), αφιερωμένο στην επικοινωνία με αυτόν τον συγκεκριμένο πελάτη.
             Socket connectionSocket = welcomeSocket.accept();
+            // Βοηθητικό μήνυμα: από ποια διεύθυνση IP και θύρα συνδέθηκε ο πελάτης
+            System.out.println("Client connected from " + connectionSocket.getInetAddress() + ":" + connectionSocket.getPort());
 
             // Δημιουργούμε αντικείμενο BufferedReader για την ανάγνωση δεδομένων από τον πελάτη
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));

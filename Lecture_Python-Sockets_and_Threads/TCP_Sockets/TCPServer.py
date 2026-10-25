@@ -33,6 +33,8 @@ serverSocket.listen(1)
 
 # Μήνυμα ότι ο διακομιστής είναι έτοιμος να δεχτεί συνδέσεις
 print("The server is ready to receive")
+# Βοηθητικό μήνυμα: σε ποια θύρα ακούει ο server και πώς σταματά
+print("Listening on port", serverPort, "- waiting for a client... (press Ctrl+C to stop)")
 
 # Ατέρμονος βρόχος για την εξυπηρέτηση των πελατών, του ενός μετά τον άλλο
 while True:
@@ -40,6 +42,8 @@ while True:
     #   connectionSocket : ένα ΝΕΟ socket, αφιερωμένο στην επικοινωνία με αυτόν τον πελάτη
     #   addr             : τη διεύθυνση του πελάτη, ως πλειάδα (IP, θύρα)
     connectionSocket, addr = serverSocket.accept()
+    # Βοηθητικό μήνυμα: από ποια διεύθυνση (IP, θύρα) συνδέθηκε ο πελάτης
+    print("Client connected from", addr)
 
     # Λήψη έως 1024 bytes από τον πελάτη και μετατροπή τους από bytes σε string με τη decode()
     sentence = connectionSocket.recv(1024).decode()

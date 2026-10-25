@@ -35,6 +35,8 @@ message = input('Input lowercase sentence:')
 # και δίνεται μαζί με τη διεύθυνση του προορισμού (IP, θύρα) του server.
 # Το λειτουργικό σύστημα δίνει αυτόματα στον client μια ελεύθερη θύρα αποστολής.
 clientSocket.sendto(message.encode(), (serverName, serverPort))
+# Βοηθητικό μήνυμα: το πακέτο στάλθηκε και ο client περιμένει απάντηση
+print("Sent to UDP server", serverName, "port", serverPort, "- waiting for reply...")
 
 # Λήψη της απάντησης: η recvfrom(2048) περιμένει ένα πακέτο (έως 2048 bytes) και επιστρέφει
 # τα δεδομένα και τη διεύθυνση (IP, θύρα) του αποστολέα, δηλαδή του server.
