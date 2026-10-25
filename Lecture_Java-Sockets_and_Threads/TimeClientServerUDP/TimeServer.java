@@ -34,15 +34,21 @@ public class TimeServer {
             System.out.println("Time Server is ON");
             System.out.println("Listening on port 8505. Waiting for time requests... (press Ctrl+C to stop)");
         } catch(Exception e) {
-            // Π.χ. αν η θύρα 8505 χρησιμοποιείται ήδη από άλλο πρόγραμμα
+            // Π.χ. αν η θύρα 8505 χρησιμοποιείται ήδη από άλλο πρόγραμμα.
+            // Χωρίς socket ο server δεν μπορεί να λειτουργήσει, οπότε τερματίζουμε με return
+            // (αλλιώς ο βρόχος παρακάτω θα γέμιζε την οθόνη με σφάλματα NullPointerException).
             System.out.println("Error : " +
             e.toString());
+            return;
         }
         // Ο server μένει σε έναν ατέρμονο βρόχο και απαντά στα
         // αιτήματα...
         while (true) {
             // Περιμένουμε ένα αίτημα: η receive() μπλοκάρει μέχρι να φτάσει πακέτο
             try {
+                // Η receive() αλλάζει το μήκος του packet στο μήκος του πακέτου που ήρθε.
+                // Το επαναφέρουμε στο πλήρες μέγεθος του buffer πριν από κάθε νέα λήψη.
+                packet.setLength(buf.length);
                 s.receive(packet);
             } catch (Exception e) {
                 System.out.println("Error : " +
@@ -61,28 +67,35 @@ public class TimeServer {
             Calendar rightNow = Calendar.getInstance();
 
             // Συνθέτουμε το κείμενο της απάντησης από τα πεδία του Calendar:
-            //   DATE   : ημέρα του μήνα
-            //   MONTH  : μήνας, μετρώντας από το 0 (Ιανουάριος = 0), γι' αυτό προσθέτουμε 1
-            //   YEAR   : έτος
-            //   HOUR   : ώρα σε 12ωρη μορφή (0-11)· για 24ωρη μορφή υπάρχει το HOUR_OF_DAY
-            //   MINUTE, SECOND : λεπτά και δευτερόλεπτα (χωρίς μηδενικό μπροστά, π.χ. 5 αντί για 05)
-            String localtime =""+rightNow.get(Calendar.DATE)+"/"+(rightNow.get(Calendar.MONTH)+1)+"/"+ rightNow.get(Calendar.YEAR)+ "-"+rightNow.get(Calendar.HOUR )+":"+rightNow.get(Calendar.MINUTE)+":"+ rightNow.get(Calendar.SECOND);
+            //   DATE        : ημέρα του μήνα
+            //   MONTH       : μήνας, μετρώντας από το 0 (Ιανουάριος = 0), γι' αυτό προσθέτουμε 1
+            //   YEAR        : έτος
+            //   HOUR_OF_DAY : ώρα σε 24ωρη μορφή (0-23)· το HOUR θα έδινε 12ωρη μορφή χωρίς ΠΜ/ΜΜ
+            //   MINUTE, SECOND : λεπτά και δευτερόλεπτα
+            // Η String.format() συνθέτει το κείμενο: το %d τυπώνει έναν ακέραιο και το %02d έναν
+            // ακέραιο με τουλάχιστον 2 ψηφία, βάζοντας 0 μπροστά (π.χ. 5 → 05).
+            // Αποτέλεσμα, π.χ.: 24/10/2026-20:05:09
+            String localtime = String.format("%d/%d/%d-%02d:%02d:%02d",
+                    rightNow.get(Calendar.DATE), rightNow.get(Calendar.MONTH) + 1, rightNow.get(Calendar.YEAR),
+                    rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), rightNow.get(Calendar.SECOND));
 
             // Άλλη εναλλακτική μορφή, με την πλήρη ημερομηνία από τη getTime():
             //String localtime ="The Current Date is:" + rightNow.getTime()
 
-            // Μετατρέπουμε το κείμενο localtime σε πίνακα bytes,
-            // γιατί ένα datagram μεταφέρει μόνο bytes
-            buf = localtime.getBytes();
+            // Μετατρέπουμε το κείμενο localtime σε πίνακα bytes, γιατί ένα datagram μεταφέρει
+            // μόνο bytes. Χρησιμοποιούμε ξεχωριστό πίνακα (sendBuf), ώστε ο buffer λήψης buf
+            // να μείνει άθικτος για το επόμενο αίτημα.
+            byte[] sendBuf = localtime.getBytes();
             // Παλαιότερος (deprecated) τρόπος αντιγραφής των χαρακτήρων στον buffer:
             //localtime.getBytes(0, localtime.length(), buf, 0);
-            // Κατασκευάζουμε το πακέτο απάντησης: δεδομένα, μήκος, και ως προορισμό
-            // τη διεύθυνση IP και τη θύρα του πελάτη που έστειλε το αίτημα
+            // Κατασκευάζουμε ξεχωριστό πακέτο απάντησης (reply): δεδομένα, μήκος, και ως προορισμό
+            // τη διεύθυνση IP και τη θύρα του πελάτη που έστειλε το αίτημα.
+            // Το packet της λήψης μένει ίδιο και ξαναχρησιμοποιείται στην επόμενη επανάληψη.
             try {
-                packet = new DatagramPacket(buf,
-                buf.length, cl, port);
+                DatagramPacket reply = new DatagramPacket(sendBuf,
+                sendBuf.length, cl, port);
                 // Το στέλνουμε!
-                s.send(packet);
+                s.send(reply);
             } catch (Exception e) {
                 System.out.println("Error : " +
                 e.toString());
