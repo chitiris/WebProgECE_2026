@@ -35,17 +35,17 @@ print("Listening on 127.0.0.1 port", serverPort, "- waiting for packets... (pres
 # Ατέρμονος βρόχος για την εξυπηρέτηση των πακέτων που έρχονται από τους πελάτες
 while True:
 
- # Η recvfrom(2048) περιμένει ένα πακέτο (έως 2048 bytes) και επιστρέφει:
- #   message       : τα δεδομένα του πακέτου (bytes)
- #   clientAddress : τη διεύθυνση του πελάτη που το έστειλε, ως πλειάδα (IP, θύρα)
- message, clientAddress = serverSocket.recvfrom(2048)
- # Βοηθητικό μήνυμα: από ποια διεύθυνση (IP, θύρα) ήρθε το πακέτο
- print("Packet received from", clientAddress)
- print(message.decode())
+    # Η recvfrom(2048) περιμένει ένα πακέτο (έως 2048 bytes) και επιστρέφει:
+    #   message       : τα δεδομένα του πακέτου (bytes)
+    #   clientAddress : τη διεύθυνση του πελάτη που το έστειλε, ως πλειάδα (IP, θύρα)
+    message, clientAddress = serverSocket.recvfrom(2048)
+    # Βοηθητικό μήνυμα: από ποια διεύθυνση (IP, θύρα) ήρθε το πακέτο
+    print("Packet received from", clientAddress)
+    print(message.decode())
 
- # Μετατροπή του μηνύματος από bytes σε string (decode) και στη συνέχεια σε κεφαλαία γράμματα
- modifiedMessage = message.decode().upper()
+    # Μετατροπή του μηνύματος από bytes σε string (decode) και στη συνέχεια σε κεφαλαία γράμματα
+    modifiedMessage = message.decode().upper()
 
- # Αποστολή του τροποποιημένου μηνύματος (ως bytes, με encode) πίσω στη διεύθυνση (IP, θύρα)
- # του πελάτη. Η διεύθυνση αυτή είναι γνωστή μόνο από το πακέτο που λάβαμε.
- serverSocket.sendto(modifiedMessage.encode(), clientAddress)
+    # Αποστολή του τροποποιημένου μηνύματος (ως bytes, με encode) πίσω στη διεύθυνση (IP, θύρα)
+    # του πελάτη. Η διεύθυνση αυτή είναι γνωστή μόνο από το πακέτο που λάβαμε.
+    serverSocket.sendto(modifiedMessage.encode(), clientAddress)
